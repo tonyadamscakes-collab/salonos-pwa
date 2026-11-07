@@ -84,6 +84,10 @@ const CATEGORY_FILE: Record<string, string> = {
   Extensions: "treatment-extensions.webp",
 };
 
+export function categoryShot(category: string): Shot {
+  return shotFile(CATEGORY_FILE[category] ?? "treatment-other.webp", category);
+}
+
 const POOLS = {
   cut: ["treatment-hair-cut-1.webp", "cut-blowdry.webp", "treatment-hair-cut-2.webp", "cut-fringe.webp", "keyword-curls.webp", "treatment-mens.webp", "keyword-fade.webp"],
   colour: ["treatment-hair-colour-1.webp", "keyword-balayage.webp", "keyword-highlights.webp", "treatment-hair-colour-2.webp", "keyword-vivid-colour.webp"],

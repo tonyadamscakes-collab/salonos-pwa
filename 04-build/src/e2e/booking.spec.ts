@@ -69,6 +69,23 @@ test("steps the booking flow forward and back without losing the treatment", asy
   await expect(page.getByRole("button", { name: /SAMPLE – Jordan Hale/ })).toHaveAttribute("aria-pressed", "true");
 });
 
+test("treatment categories show photos and only that menu", async ({ page }) => {
+  await page.goto("/");
+  const hero = page.getByRole("img", { name: /SalonOS sign/ });
+  await expect(hero).toBeVisible();
+  const heroBox = await hero.evaluate((el) => el.getBoundingClientRect());
+  expect(heroBox.height).toBeGreaterThan(200);
+  expect(heroBox.height).toBeLessThan(560);
+  await page.getByRole("link", { name: "Nails" }).click();
+  await expect(page).toHaveURL(/category=Beauty/);
+  await expect(page.getByRole("button", { name: /Gel Manicure/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /Ladies Cut & Blow Dry Short/ })).toHaveCount(0);
+  const photo = page.locator("button.tile img").first();
+  await expect(photo).toBeVisible();
+  const photoBox = await photo.evaluate((el) => el.getBoundingClientRect());
+  expect(photoBox.height).toBeGreaterThan(80);
+});
+
 test("treatment cards keep their text inside the card", async ({ page }) => {
   await page.goto("/book/treatment");
   await expect(page.getByRole("link", { name: /Request a quote/ }).first()).toBeVisible();

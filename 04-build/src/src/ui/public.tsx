@@ -7,7 +7,7 @@ import type { ServiceRecord } from "../data/model";
 import { DRAFT } from "./legal";
 import { ShopTrail } from "./nav";
 import { HeroPhoto, Photo } from "./Photo";
-import { OPTIONS, treatmentShot, treatmentShots, productShot, avatarFor, HERO, shotFile } from "./photos";
+import { OPTIONS, treatmentShot, treatmentShots, productShot, avatarFor, HERO, shotFile, categoryShot } from "./photos";
 
 function priceLabel(service: ServiceRecord): string {
   if (service.priceType === "quote" || service.priceType === "monthly" || service.basePence == null) {
@@ -23,6 +23,29 @@ function priceLabel(service: ServiceRecord): string {
 }
 
 const FEATURED = ["a1", "a12", "a28", "a23", "a41", "a7", "a3", "a45"];
+
+const BOOK_CATEGORIES = [
+  "Hair – Cutting & Styling",
+  "Hair – Colour & Chemical",
+  "Hair – Treatments",
+  "Beauty – Brows & Lashes",
+  "Beauty – Nails",
+  "Beauty – Waxing",
+  "Beauty – Facials",
+  "Packages",
+] as const;
+
+function categoryLabel(category: string): string {
+  if (category.includes("Cutting")) return "Cuts and styling";
+  if (category.includes("Colour")) return "Colour";
+  if (category.includes("Treatment")) return "Hair treatments";
+  if (category.includes("Brow")) return "Brows and lashes";
+  if (category.includes("Nail")) return "Nails";
+  if (category.includes("Wax")) return "Waxing";
+  if (category.includes("Facial")) return "Facials";
+  if (category === "Packages") return "Packages and make-up";
+  return category;
+}
 
 const GRID_FILLERS = [
   { key: "ask", title: "Can't see it? Ask us", text: "Tell us what you want. Quote-only work starts as an enquiry.", to: "/enquiry", shot: OPTIONS.consult },
@@ -69,6 +92,25 @@ export function Home() {
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      <section className="section">
+        <h2>Treatments</h2>
+        <p className="lede">The locked menu, one tile per category. Add-ons are chosen later in the booking. Further names, including manicures, pedicures, nail art and make-up, stay in the staff catalogue until the salon accepts them. No price is filled in for those.</p>
+        <div className="tiles">
+          {BOOK_CATEGORIES.map((category) => {
+            const count = services.filter((row) => row.source === "brief" && row.category === category && !["a47", "a48", "a49", "a50"].includes(row.id)).length;
+            return (
+              <Link key={category} className="shot" to={`/book/treatment?category=${encodeURIComponent(category)}`}>
+                <Photo className="tile-photo" shot={categoryShot(category)} alt="" sizes="(max-width: 980px) 50vw, 25vw" />
+                <div>
+                  <h3>{categoryLabel(category)}</h3>
+                  <p className="muted">{count} on the bookable menu</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
@@ -307,6 +349,15 @@ export function Book() {
     set(list.includes(id) ? list.filter((row) => row !== id) : [...list, id]);
   }
 
+  function chooseCategory(next: string) {
+    const query = new URLSearchParams();
+    if (next) query.set("category", next);
+    if (service && (!next || service.category === next)) query.set("service", service.id);
+    else setServiceId("");
+    const text = query.toString();
+    navigate(`/book/treatment${text ? `?${text}` : ""}`, { replace: true });
+  }
+
   async function confirm() {
     if (!service || startMs == null || !staffId) {
       setMessage("Choose a treatment, an artist and a time.");
@@ -370,6 +421,13 @@ export function Book() {
       {slug === "treatment" && (
         <div>
           <h2>1. Pick a treatment</h2>
+          <p className="lede">Choose a category. Each card is a locked-brief service with its photo. Extra 15 min, long or thick hair, toner and deep conditioning are on the Extras step.</p>
+          <nav className="filters" aria-label="Treatment categories">
+            <button type="button" aria-pressed={category === ""} onClick={() => chooseCategory("")}>All treatments</button>
+            {BOOK_CATEGORIES.map((item) => (
+              <button key={item} type="button" aria-pressed={category === item} onClick={() => chooseCategory(item)}>{categoryLabel(item)}</button>
+            ))}
+          </nav>
           <div className="grid">
             {(() => {
               const shown = bookable.filter((row) => !category || row.category === category);
@@ -379,6 +437,7 @@ export function Book() {
                 const copy = (
                   <span className="tile-copy">
                     <strong>{row.name}</strong>
+                    <span className="muted">{categoryLabel(row.category)}</span>
                     <span className="muted">{row.durationMin ? `about ${formatDuration(row.durationMin)}` : "Duration not set"}</span>
                     <span className="price">{priceLabel(row)}</span>
                     {row.priceType === "quote" && <span className="btn">Request a quote</span>}
@@ -387,14 +446,14 @@ export function Book() {
                 if (row.priceType === "quote") {
                   return (
                     <Link key={row.id} className="tile" to={`/enquiry?service=${row.id}`}>
-                      <Photo shot={shot} alt="" sizes="(max-width: 980px) 50vw, 25vw" />
+                      <Photo className="tile-photo" shot={shot} alt="" sizes="(max-width: 980px) 50vw, 25vw" />
                       {copy}
                     </Link>
                   );
                 }
                 return (
-              <button key={row.id} className={serviceId === row.id ? "tile selected" : "tile"} type="button" aria-pressed={serviceId === row.id} onClick={() => { setServiceId(row.id); navigate(`/book/treatment?service=${row.id}`, { replace: true }); }}>
-                <Photo shot={shot} alt="" sizes="(max-width: 980px) 50vw, 25vw" />
+              <button key={row.id} className={serviceId === row.id ? "tile selected" : "tile"} type="button" aria-pressed={serviceId === row.id} onClick={() => { setServiceId(row.id); const query = new URLSearchParams(); query.set("service", row.id); if (category) query.set("category", category); navigate(`/book/treatment?${query.toString()}`, { replace: true }); }}>
+                <Photo className="tile-photo" shot={shot} alt="" sizes="(max-width: 980px) 50vw, 25vw" />
                 {copy}
               </button>
                 );

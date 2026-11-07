@@ -27,12 +27,13 @@ export function StaffApp() {
       <section className="card">
         <img className="wordmark" src="/media/logo-wordmark-dark.svg" alt="SalonOS" width={534} height={170} />
         <h1>Staff lock</h1>
+        <p>This is the staff back office: diary, walk-ins, clients, till, stock, cash-up, catalogue, orders, finance, reports and settings. Use the pink Staff link in the top menu.</p>
         <p>Health records and formulas are encrypted on this device. Enter the device PIN to unlock. The preview PIN is published because every client is fictional.</p>
         <form onSubmit={(event) => { event.preventDefault(); void salon.unlock(pin).then((ok) => setMessage(ok ? "" : "PIN not recognised.")); }}>
           <label>Device PIN<input type="password" autoComplete="current-password" value={pin} onChange={(e) => setPin(e.target.value)} /></label>
           <button className="btn" type="submit">Unlock</button>
         </form>
-        <details>
+        <details open>
           <summary>SAMPLE credentials (fictional, published for this preview)</summary>
           <p>Device PIN 2580. Change it in settings before any real client exists.</p>
           <ul>{SAMPLE_LOGINS.map((row) => <li key={row.username}>{row.label}: {row.username} / {row.pin}{row.second ? ` / second factor ${row.second}` : ""}</li>)}</ul>
@@ -61,7 +62,7 @@ export function StaffApp() {
     <div className="staff">
       <nav className="side" aria-label="Staff">
         <strong>{salon.userName}</strong>
-        <NavLink to="/team">Diary</NavLink>
+        <NavLink to="/team" end>Diary</NavLink>
         <NavLink to="/team/queue">Walk-ins</NavLink>
         <NavLink to="/team/clients">Clients</NavLink>
         <NavLink to="/team/till">Till</NavLink>
@@ -359,14 +360,23 @@ function CashUp() {
 
 function Catalogue() {
   const [q, setQ] = useState("");
+  const [cat, setCat] = useState("");
   const [message, setMessage] = useState("");
   const [page, setPage] = useState(1);
-  const rows = (salon.privateData?.services ?? []).filter((row) => row.source === "seed" && row.name.toLowerCase().includes(q.toLowerCase()));
+  const seed = (salon.privateData?.services ?? []).filter((row) => row.source === "seed");
+  const categories = [...new Set(seed.map((row) => row.category))].sort((a, b) => a.localeCompare(b, "en-GB"));
+  const rows = seed.filter((row) => (!cat || row.category === cat) && row.name.toLowerCase().includes(q.toLowerCase()));
   const slice = rows.slice((page - 1) * 25, page * 25);
   return (
     <section>
       <h1>Catalogue</h1>
-      <p>{salon.privateData?.services.filter((row) => row.source === "seed").length} seed treatments are inactive until accepted. They can be edited or deleted. Deleting them does not remove the locked brief services. No seed price is filled in.</p>
+      <p>{seed.length} seed treatments are inactive until accepted. They can be edited or deleted. Deleting them does not remove the locked brief services. No seed price is filled in. Prices stay “Prices on request”.</p>
+      <label>Category
+        <select value={cat} onChange={(e) => { setCat(e.target.value); setPage(1); }}>
+          <option value="">All categories ({seed.length})</option>
+          {categories.map((item) => <option key={item} value={item}>{item} ({seed.filter((row) => row.category === item).length})</option>)}
+        </select>
+      </label>
       <label>Search seed<input value={q} onChange={(e) => { setQ(e.target.value); setPage(1); }} /></label>
       <table>
         <thead><tr><th>Name</th><th>Category</th><th>Duration</th><th>Price</th><th></th></tr></thead>
