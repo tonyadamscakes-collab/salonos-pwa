@@ -1,0 +1,165 @@
+{
+ "_note": "Lowercase substring match against treatment_name; check longer match terms first. Fallback = treatment-category image.",
+ "balayage": {
+  "file": "keyword-balayage.webp",
+  "match": [
+   "balayage",
+   "babylights",
+   "ombre",
+   "sombre"
+  ]
+ },
+ "highlights": {
+  "file": "keyword-highlights.webp",
+  "match": [
+   "highlights",
+   "foils",
+   "lowlights",
+   "half head",
+   "full head"
+  ]
+ },
+ "gel": {
+  "file": "keyword-gel.webp",
+  "match": [
+   "gel",
+   "shellac",
+   "gel polish",
+   "builder gel",
+   "biab",
+   "dip"
+  ]
+ },
+ "acrylic": {
+  "file": "keyword-acrylic.webp",
+  "match": [
+   "acrylic",
+   "sculpted",
+   "nail extensions",
+   "infill",
+   "rebalance"
+  ]
+ },
+ "pedicure": {
+  "file": "keyword-pedicure.webp",
+  "match": [
+   "pedicure",
+   "feet",
+   "foot",
+   "toenail"
+  ]
+ },
+ "lash lift": {
+  "file": "keyword-lash-lift.webp",
+  "match": [
+   "lash lift",
+   "lash tint",
+   "lash perm",
+   "lashes",
+   "eyelash"
+  ]
+ },
+ "brow lamination": {
+  "file": "keyword-brow-lamination.webp",
+  "match": [
+   "brow lamination",
+   "brow lift",
+   "brow tint",
+   "brow shape",
+   "hd brows",
+   "brows"
+  ]
+ },
+ "hydrafacial-style facial": {
+  "file": "keyword-hydra-facial.webp",
+  "match": [
+   "hydrafacial-style",
+   "hydra",
+   "hydrating facial",
+   "vacuum facial",
+   "microdermabrasion",
+   "dermaplan",
+   "facial",
+   "peel"
+  ]
+ },
+ "beard": {
+  "file": "keyword-beard.webp",
+  "match": [
+   "beard",
+   "moustache",
+   "shave",
+   "hot towel"
+  ]
+ },
+ "fade": {
+  "file": "keyword-fade.webp",
+  "match": [
+   "fade",
+   "skin fade",
+   "taper",
+   "crop",
+   "clipper"
+  ]
+ },
+ "spray tan": {
+  "file": "keyword-spray-tan.webp",
+  "match": [
+   "spray tan",
+   "tan",
+   "bronz",
+   "airbrush tan"
+  ]
+ },
+ "bridal make-up": {
+  "file": "keyword-bridal-makeup.webp",
+  "match": [
+   "bridal make-up",
+   "bridal makeup",
+   "wedding make-up",
+   "wedding makeup",
+   "make-up",
+   "makeup",
+   "party make-up"
+  ]
+ },
+ "threading": {
+  "file": "keyword-threading.webp",
+  "match": [
+   "threading",
+   "thread",
+   "upper lip threading"
+  ]
+ },
+ "curls": {
+  "file": "keyword-curls.webp",
+  "match": [
+   "curls",
+   "perm",
+   "curl",
+   "curly",
+   "afro",
+   "texture"
+  ]
+ },
+ "vivid colour": {
+  "file": "keyword-vivid-colour.webp",
+  "match": [
+   "vivid",
+   "fashion colour",
+   "fashion color",
+   "pastel",
+   "neon",
+   "creative colour",
+   "bleach"
+  ]
+ },
+ "hot stone": {
+  "file": "treatment-massage.webp",
+  "match": [
+   "hot stone",
+   "hot-stone",
+   "stone massage"
+  ]
+ }
+}

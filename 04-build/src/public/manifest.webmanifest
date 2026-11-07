@@ -1,0 +1,10 @@
+{
+  "name": "SalonOS preview",
+  "short_name": "SalonOS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4efe8",
+  "theme_color": "#6e2c3a",
+  "lang": "en-GB",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
