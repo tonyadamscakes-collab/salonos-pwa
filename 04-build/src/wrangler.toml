@@ -1,0 +1,7 @@
+name = "salonos"
+compatibility_date = "2026-11-01"
+pages_build_output_dir = "dist"
+
+# No D1 binding, no KV, no custom domain, no secrets required.
+# The coordinator adds a free D1 database later. See d1/README.md.
+# Workers Logs and traces are left off so this preview does not enable extra products.
